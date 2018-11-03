@@ -22,7 +22,7 @@
     <meta name="description" content="一个大学学生，将自己平时学的一些东西放在上面，希望结交更多的朋友">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>git教程 · 范茂伟 | Blog</title>
+    <title>MySQL教程 · 范茂伟 | Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Fan Maowei&#39; Blog</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">git教程</a>
+                <a href="#" class="post-name">MySQL教程</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            git教程
+            MySQL教程
             <!-- 404 -->
             
         </h1>
@@ -266,18 +266,18 @@ height:50vh;
                 
                     <div class="post-intro-tags">
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="git">git</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="mysql 数据库 后端">mysql 数据库 后端</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">635</span>阅读时长: <span class="post-count reading-time">2 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">448</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2018/11/02</span>
+                    <span class="post-intro-time">2018/11/03</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -401,63 +401,95 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="📕Git基本教程"><a href="#📕Git基本教程" class="headerlink" title="📕Git基本教程"></a>📕Git基本教程</h1><p><em>⚡<a href="">Git</a>是目前世界上最先进的分布式版本控制系统（没有之一）。</em></p>
-<ul>
-<li><p><strong>在<a href="">Windows</a>上安装<a href="">Git</a></strong></p>
+        <h1 id="MySQL-指南"><a href="#MySQL-指南" class="headerlink" title="MySQL 指南"></a>MySQL 指南</h1><blockquote>
 <blockquote>
-<p><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git官网</a>直接下载安装程序，（网速慢的同学请移步<a href="https://pan.baidu.com/s/1kU5OCOB#list/path=%2Fpub%2Fgit" target="_blank" rel="noopener">国内镜像</a>）</p>
+<p>学习视频地址：<a href="https://pan.baidu.com/s/1Xn78u1Npxe_YNJEfgJn3xA#list/path=%2F" target="_blank" rel="noopener">百度云</a>，密码：<code>79sm</code>，⚡特此说明！</p>
 </blockquote>
-<ul>
-<li>安装完成后，在开始菜单里找到<code>&quot;Git&quot;-&gt;&quot;Git Bash&quot;</code>,进行如下配置：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;Your Name&quot;  </span><br><span class="line">$ git config --global user.email &quot;email@example.com&quot;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>生成相应的令牌，本地一份，Github 一份，这样 Github 可以在你使用仓库的时候，进行校验确定你的身份。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/.ssh</span><br><span class="line">$ mkdir key_backup</span><br><span class="line">$ ssh-keygen -t rsa -C &quot;email@example.com&quot;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>生成如下两个文件：</li>
-</ul>
-<p><img src="https://i.loli.net/2018/11/01/5bdb01c742769.png" alt="git.png"></p>
+</blockquote>
+<hr>
+
+<p><em><code>MySQL</code>是一个<a href="">关系型数据库管理系统</a>，由瑞典 MySQL AB 公司开发，目前属于 <a href="">Oracle</a> 旗下产品。<code>MySQL</code> 是最流行的<a href="">关系型数据库管理系统</a>之一，在 WEB 应用方面，<code>MySQL</code>是最好的 <a href="">RDBMS</a> (Relational Database Management System，关系数据库管理系统) 应用软件。</em></p>
 <blockquote>
-<p><code>id_rsa.pub</code> 就是我们待会需要的公钥文件，使用命令 <code>$ cat id_rsa.pub</code> 再将内容复制到剪切板，然后进入github账号设置里面添加SSH key</p>
+<p><strong>MySQL下载与安装</strong>: 来自<a href="https://blog.csdn.net/weixin_40396510/article/details/79277731" target="_blank" rel="noopener">weixin_40396510</a>的CSDN博客。 </p>
 </blockquote>
-<p> 然后输入 <code>$ ssh -T git@github.com</code> 测试连通状态</p>
-</li>
-<li><p><strong>创建本地仓库</strong></p>
+<p><a href="https://dev.mysql.com/downloads/file/?id=480557" target="_blank" rel="noopener"><img src="https://img.shields.io/npm/dm/eslint-config-airbnb.svg" alt="Downloads"></a></p>
+<p><code>MySQL</code>其他教程相关请看: </p>
 <ul>
-<li>选择一个本地文件夹，用作保存本地仓库文件，尽量是空文件夹。</li>
-<li><p>然后使用命令 <code>$ git init</code> 初始化文件夹。</p>
-<blockquote>
-<p>其实是在当前文件夹下生成一个叫 <code>.git</code> 的隐藏文件夹，里面是一些配置文件，不要随意更改。</p>
-</blockquote>
+<li><a href="https://www.yiibai.com/mysql/" target="_blank" rel="noopener">易百教程</a></li>
+<li><a href="http://www.runoob.com/mysql/mysql-tutorial.html" target="_blank" rel="noopener">菜鸟教程</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001391435131816c6a377e100ec4d43b3fc9145f3bb8056000" target="_blank" rel="noopener">廖雪峰的官方网站</a></li>
+</ul>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#types">Types</a></li>
+<li><a href="#references">References</a></li>
+<li><a href="#objects">Objects</a></li>
+<li><a href="#arrays">Arrays</a></li>
+<li><a href="#destructuring">Destructuring</a></li>
+<li><a href="#strings">Strings</a></li>
+<li><a href="#functions">Functions</a></li>
+</ol>
+<h2 id="Types"><a href="#Types" class="headerlink" title="Types"></a>Types</h2><p>  <a name="1.1"></a><br>  <a name="types--primitives"></a></p>
+<ul>
+<li><p><a href="#types--primitives">1.1</a> 数据库的SQL语句操作</p>
+<ul>
+<li>SQL (Structured Query Language)</li>
+<li><p>DDL</p>
+   <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> 库名</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> [库名.]表名   <span class="keyword">use</span> 库名</span><br><span class="line"></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">database</span> 库名</span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> 表名</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>使用 <code>$ git clone https://github.com/name/repository.git</code> 将远程仓库克隆到本地此文件夹下。</p>
-<blockquote>
-<p><a href="">name</a> 是自己的昵称，<a href="">repository</a> 是自己的仓库名，不要忘记末尾的 <code>.git</code> 后缀。</p>
-</blockquote>
+<li><p>DML</p>
+   <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">values</span>(<span class="string">'1'</span>,<span class="string">'zhangsan'</span>);</span><br><span class="line"><span class="keyword">update</span> <span class="keyword">users</span> <span class="keyword">set</span> <span class="keyword">name</span>=<span class="string">'aa'</span>,age=<span class="string">'18'</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">'1'</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> 表名 <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">'2'</span>;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>然后此文件夹下会多一个和你仓储名一样的文件夹，内部文件与远程仓库一样。</p>
+<li><p>DQL</p>
+   <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> 表名;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>DCL</p>
+   <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\s   <span class="comment">#看状态</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">databases</span>;   <span class="comment">#看所有库</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">tables</span>;   <span class="comment">#看所有表</span></span><br><span class="line">desc    <span class="comment">#看表结构</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span>  <span class="comment">#配置文件变量</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<p><a name="1.2"></a><br><a name="types--complex"></a></p>
 </li>
-<li><p><strong>常用命令</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git add . //添加文件</span><br><span class="line">$ git commit -m &quot;commit-messages&quot; //提交本地仓库</span><br><span class="line">$ git push origin master //提交远程仓库</span><br><span class="line">$ git pull //拉取远程文件，与以下命令类似</span><br><span class="line">$ git branch temp //创建本地分支</span><br><span class="line">$ git fetch origin master:temp</span><br><span class="line">$ git merge master</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>图床介绍</strong></p>
-<p><em>写博客就无法避免上传图片，图床就是这么一个地方，就是一个网站，你发自己的图片上传到它的网站，然后它给你一个这个图片的链接，插入博客中就能显示图片了。</em></p>
+<li><p><a href="#types--complex">1.2</a>  执行SQL语句，连接到数据库服务器</p>
 <ul>
-<li>推荐一个知名的，七牛云<a href="https://portal.qiniu.com/" target="_blank" rel="noopener">https://portal.qiniu.com/</a>，注册完实名认证后有一些优惠。 </li>
-<li>还有一个神奇的网站：<a href="https://sm.ms/" target="_blank" rel="noopener">https://sm.ms/</a>，也能用</li>
-</ul>
+<li><p>连接本机的服务器</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -h localhost -u root -p</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>Hexo+github博客搭建</strong>  </p>
-<ul>
-<li>推荐一个CSDN博主的文章，<a href="https://blog.csdn.net/Mr_yu_java/article/details/81077064" target="_blank" rel="noopener">点击这里</a></li>
-<li>一个git用户很详细的分享，<a href="https://hans2936.github.io/2018/06/06/HexoLog/" target="_blank" rel="noopener">点击这里</a></li>
-<li>当然，官方教程更全面，<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="noopener">点击这里</a></li>
+<li><p>通过地址连接到远端服务器</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -h 192.168.x.x -u root -p</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过域名连接到远端服务器</p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -h sicnu-it.cn -u root -p</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<p><em>这里分享一篇我的总结，<a href="https://github.com/fmw666/Git/blob/master/Hexo%20%2B%20Github%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA.md" target="_blank" rel="noopener">点击这里</a></em></p>
+<p><em>mysql的默认端口是<code>3306</code>，可以编辑用户目录下的 <code>.my.cnf</code> 文件进行修改。<code>mysql -P 3306 -h sicnu-it.cn -u root -p</code></em></p>
+</li>
+</ul>
+<p><strong><a href="#目录">⬆ back to top</a></strong></p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>  <a name="2.1"></a><br>  <a name="types--primitives"></a></p>
+<ul>
+<li><p><a href="#types--primitives">2.1</a> xxxx</p>
+<ul>
+<li><p>查看当前自己信息</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\s</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>显示数据库文件的路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show global variables like &quot;%datadir%&quot;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>退出</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>显示数据库列表</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建数据库</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">create database dbname;</span><br><span class="line"></span><br><span class="line">#避免已存在</span><br><span class="line">create database if not exists dbname;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除数据库</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">drop database dbname;</span><br><span class="line"></span><br><span class="line">#避免不存在</span><br><span class="line">drop database if exists dbname;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>选择一个库做为默认的数据库</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use dbname;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 </li>
 </ul>
 
@@ -466,9 +498,9 @@ height:50vh;
     
         <div class="license-wrapper">
             <p>原文作者：<a href="http://fmw666.github.io">范茂伟</a>
-            </p><p>原文链接：<a href="http://fmw666.github.io/2018-11-02/git教程/">http://fmw666.github.io/2018-11-02/git教程/</a>
-            </p><p>发表日期：<a href="http://fmw666.github.io/2018-11-02/git教程/">November 2nd 2018, 7:18:43 pm</a>
-            </p><p>更新日期：<a href="http://fmw666.github.io/2018-11-02/git教程/">November 2nd 2018, 10:02:23 pm</a>
+            </p><p>原文链接：<a href="http://fmw666.github.io/2018-11-03/MySQL教程/">http://fmw666.github.io/2018-11-03/MySQL教程/</a>
+            </p><p>发表日期：<a href="http://fmw666.github.io/2018-11-03/MySQL教程/">November 3rd 2018, 12:39:15 pm</a>
+            </p><p>更新日期：<a href="http://fmw666.github.io/2018-11-03/MySQL教程/">November 3rd 2018, 12:45:18 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -476,17 +508,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2018-11-03/MySQL教程/" title="MySQL教程">
-                    <div class="nextTitle">MySQL教程</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href="/2018-11-01/hello-world/" title="Hello World">
-                    <div class="prevTitle">Hello World</div>
+                <a href="/2018-11-02/git教程/" title="git教程">
+                    <div class="prevTitle">git教程</div>
                 </a>
             
         </li>
@@ -605,7 +632,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#📕Git基本教程"><span class="toc-number">1.</span> <span class="toc-text">📕Git基本教程</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL-指南"><span class="toc-number">1.</span> <span class="toc-text">MySQL 指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Types"><span class="toc-number">1.2.</span> <span class="toc-text">Types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">1.3.</span> <span class="toc-text">References</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
