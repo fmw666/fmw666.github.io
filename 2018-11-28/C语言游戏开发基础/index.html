@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">1.4k</span>阅读时长: <span class="post-count reading-time">6 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1.6k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -431,6 +431,8 @@ height:50vh;
 </li>
 <li><p><a href="#21">添加背景音乐</a></p>
 </li>
+<li><p><a href="#22">计时函数</a></p>
+</li>
 </ol>
 <p><strong><em>窗口</em></strong></p>
 <ol>
@@ -453,6 +455,8 @@ height:50vh;
 <li><p><a href="#19">修改文本颜色</a></p>
 </li>
 <li><p><a href="#20">修改窗体icon图标</a></p>
+</li>
+<li><p><a href="#23">修改窗体透明度</a></p>
 </li>
 </ol>
 <p>  <a name="1"></a></p>
@@ -558,6 +562,17 @@ height:50vh;
 </li>
 <li><p><strong>添加背景音乐</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 只在VC上支持</span></span><br></pre></td></tr></table></figure>
+<p><a name="22"></a></p>
+</li>
+<li><p><strong>计数函数</strong></p>
+<blockquote>
+<p><strong><em>方法一：</em></strong></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">clock_t</span> start,end;</span><br><span class="line">    start = clock();</span><br><span class="line"></span><br><span class="line">    Sleep(<span class="number">2000</span>);</span><br><span class="line"></span><br><span class="line">    end = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"time=%f\n"</span>,(<span class="keyword">double</span>)(end-start)/CLK_TCK);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong><em>方法二：</em></strong></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    DWORD end,start;</span><br><span class="line">    start= GetTickCount();</span><br><span class="line"></span><br><span class="line">    Sleep(<span class="number">2000</span>);</span><br><span class="line"></span><br><span class="line">    end= GetTickCount();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"time=%d\n"</span>,end-start);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>修改字体大小</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//暂未</span></span><br></pre></td></tr></table></figure>
@@ -565,6 +580,10 @@ height:50vh;
 </li>
 <li><p><strong>修改窗体icon图标</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Dev-C++ 新建项目-&gt;`Ctrl+H`(项目属性)</span><br></pre></td></tr></table></figure>
+<p><a name="23"></a></p>
+</li>
+<li><p><strong>修改窗体透明度</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setWinTransparent</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HWND hwnd = GetConsoleWindow();</span><br><span class="line">    <span class="keyword">int</span> ExdStyle = (<span class="keyword">int</span>)GetWindowLong(hwnd, GWL_EXSTYLE);</span><br><span class="line">    <span class="comment">//通过SetWindowLong设置窗口的属性，多增加了一个WS_EX_LAYERED支持透明</span></span><br><span class="line">    SetWindowLong(hwnd, GWL_EXSTYLE, ExdStyle | WS_EX_LAYERED);</span><br><span class="line">    SetLayeredWindowAttributes(GetConsoleWindow(),RGB(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">200</span>, LWA_ALPHA);<span class="comment">//200为透明度值（0-255）</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    setWinTransparent();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>键盘输入上下左右，回车确定，Esc退出</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> input;</span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    input=getch();</span><br><span class="line">    <span class="keyword">if</span>(input==<span class="number">27</span>)&#123;            <span class="comment">//Esc键ASCII码为27</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(input==<span class="number">13</span>)&#123;            <span class="comment">//回车键ASCII码为13</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(input!=<span class="number">-32</span>) <span class="keyword">continue</span>;  <span class="comment">//避免因从键盘上输入的其他无关值影响程序进行</span></span><br><span class="line">    input=getch();            <span class="comment">//在读取上下左右ASCII码前必须添加</span></span><br><span class="line">    <span class="keyword">if</span>(input==<span class="number">72</span>)&#123;            <span class="comment">//上的ASCII码为72</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(input==<span class="number">80</span>)&#123;            <span class="comment">//下的ASCII码为80</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(input==<span class="number">75</span>)&#123;            <span class="comment">//左的ASCII码为75</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(input==<span class="number">77</span>)&#123;            <span class="comment">//右的ASCII码为77</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -579,7 +598,7 @@ height:50vh;
             <p>原文作者：<a href="http://fmw666.github.io">范茂伟</a>
             </p><p>原文链接：<a href="http://fmw666.github.io/2018-11-28/C语言游戏开发基础/">http://fmw666.github.io/2018-11-28/C语言游戏开发基础/</a>
             </p><p>发表日期：<a href="http://fmw666.github.io/2018-11-28/C语言游戏开发基础/">November 28th 2018, 2:02:20 pm</a>
-            </p><p>更新日期：<a href="http://fmw666.github.io/2018-11-28/C语言游戏开发基础/">November 28th 2018, 3:29:42 pm</a>
+            </p><p>更新日期：<a href="http://fmw666.github.io/2018-11-28/C语言游戏开发基础/">November 29th 2018, 1:42:29 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
