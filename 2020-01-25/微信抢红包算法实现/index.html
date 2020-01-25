@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="范茂伟">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="范茂伟">
+    
+    <meta name="keywords" content="hexo,hexo-theme,hexo-blog,IT">
+    
+    <meta name="description" content="一个大学学生，将自己平时学的一些东西放在上面，希望结交更多的朋友">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>微信抢红包算法实现（Python） · 范茂伟 | Blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/uribnab-draw.png">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >Fan Maowei&#39; Blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">微信抢红包算法实现（Python）</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>Fan Maowei' Blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/money/hongbao.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            微信抢红包算法实现（Python）
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "算法">算法</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "抢红包">抢红包</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">4.1k</span>阅读时长: <span class="post-count reading-time">17 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/01/25</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="💬-写在最前"><a href="#💬-写在最前" class="headerlink" title="💬 写在最前"></a>💬 写在最前</h2><p>&emsp;&emsp;首先，新的一年，祝大家2020鼠年新春快乐啊！</p>
+<p><img src="/intro/money/happy-new-year.jpg" width="200"></p>
+<p>&emsp;&emsp;同时，也希望武汉加油，中国加油，祝大家都能平平安安，健健康康。</p>
+<p><img src="/intro/money/wuhan.jpg" width="400"></p>
+<div align="center"><br><small>图片均来自网络</small><br></div>
+
+<p><strong><em>(友情提醒，本文除此博客外，作者未在其他平台发布。如要引用，请先与本人取得联系，谢谢理解。)</em></strong></p>
+<p><br></p>
+<h2 id="❔-问题提出"><a href="#❔-问题提出" class="headerlink" title="❔ 问题提出"></a>❔ 问题提出</h2><p>&emsp;&emsp;新春虽然快乐，但我却有了迷惑。</p>
+<p>&emsp;&emsp;什么迷惑呢？</p>
+<p>&emsp;&emsp;相信大家这几天都会发红包，也会抢红包。可是，大家有想过，为什么自己就抢得这么<strong>少</strong>呢?(不会就我一人脸黑吧[手动狗头])</p>
+<p><img src="/intro/money/cut.jpg" width="300"></p>
+<p>&emsp;&emsp;当然，这不是全部重点，重点还有，为什么抢到的有些红包这么吉利呢？(虽然少)</p>
+<p>&emsp;&emsp;比如，20元的红包，有人就会抢到 <code>1.66元</code>，<code>0.88元</code>，等诸如此类”幸运”的数字。</p>
+<p>&emsp;&emsp;然后，我就开始好奇，微信抢红包的算法究竟是怎样实现的?（程序员上线）</p>
+<p><img src="/intro/money/coder.jpg" width="400"></p>
+<p><br></p>
+<h2 id="🔍-开始思考"><a href="#🔍-开始思考" class="headerlink" title="🔍 开始思考"></a>🔍 开始思考</h2><p>&emsp;&emsp;首先，假如一次红包是<code>100元</code>(为了便于计算和理解)，然后红包个数是<code>10个</code>(只发一个就毫无必要计算了，抢就完事儿)，每次最小限额是<code>0.01分</code>(按照微信标准)</p>
+<p>&emsp;&emsp;有人会想，抢红包，不就 <strong>每个人获得剩余红包的一个随机数额</strong> 不就好了吗？(但注意要保证最后一个抢的人至少还有1分钱可以领)</p>
+<p>&emsp;&emsp;打比方，第一个抢红包的人领取的红包数额是<code>0~100元</code>之间的一个随机数额</p>
+<p>&emsp;&emsp;第二个抢红包的人领取的红包数额是<code>0~剩余数额</code>(减去前面的人抢完之后) 之间的一个随机数额</p>
+<p>&emsp;&emsp;依次往下，直到最后一个人抢完。</p>
+<p><img src="/intro/money/perfect.jpg" width="200"></p>
+<p>&emsp;&emsp;但这个时候”手残党”们可能会有意见了，其中会有聪明的人提出质疑：这个方法，只对那些 <strong>优先</strong> 抢红包的人有利，因为抢得越快，获得高金额红包的概率就越大！</p>
+<p>&emsp;&emsp;真是这么回事吗？</p>
+<p>&emsp;&emsp;其实不难发现，对于上述假设，10人平分100元红包，平均每个人能抢到<code>10元</code>钱。而如果采取刚刚那个算法，第一个抢的人则是从0~100的数额之间随机抢到一个大小，那么他能抢到的平均红包数额是<code>50元</code>！后面的人依次红包数额减小。所以，这个算法，仅对优先抢的人有利。正所谓，早起的鸟儿有虫吃，手速快的人，有钱领。</p>
+<p>&emsp;&emsp;<em>（稍微解释一下，我们这里所说的，只是优先抢的人，抢到高额红包的 <strong>概率</strong> 更大！并不是优先抢的人 <strong>一定</strong> 比后面抢的人红包更大）</em></p>
+<p>&emsp;&emsp;咳咳，可是，我们平时用微信抢红包真是这样的吗？</p>
+<p>&emsp;&emsp;通过大家抢红包这么多年的经验看，好像微信抢红包对每一个人都是相对公平的吧？似乎没有区分过先来后到。</p>
+<p>&emsp;&emsp;那么咱是不是就得考虑考虑其他算法了？不过，这个算法难道就不可行吗？我凭单身这么多年的手速，我多抢点钱不好吗？</p>
+<p>&emsp;&emsp;所以，咱们就还是把这个算法用<code>Python</code>实现一下，至少它在某些方面是有可行之处的：</p>
+<p><br></p>
+<h2 id="💡-编程解决"><a href="#💡-编程解决" class="headerlink" title="💡 编程解决"></a>💡 编程解决</h2><ul>
+<li><p>手速快，拿钱概率高 算法：</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python 内置随机数模块</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个问题类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Q</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># 初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, money=<span class="number">100.0</span>, amount=<span class="number">10</span>)</span>:</span></span><br><span class="line">        <span class="comment"># 红包大小</span></span><br><span class="line">        self.money = money</span><br><span class="line">        <span class="comment"># 红包数量</span></span><br><span class="line">        self.amount = <span class="number">10</span></span><br><span class="line">        <span class="comment"># 抢红包的人，人数等于红包数量</span></span><br><span class="line">        self.people = [<span class="number">0.0</span>] * amount</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">out</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        由于微信最小金额设置是0.01元，</span></span><br><span class="line"><span class="string">        为方便计算，我们红包数据先统一乘以 100</span></span><br><span class="line"><span class="string">        目的是将可能出现的小数转换为整数。</span></span><br><span class="line"><span class="string">        最后计算完成，再在原来数据上统一除以 100</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        self.money *= <span class="number">100</span></span><br><span class="line">        <span class="comment"># 循环遍历每个人(开始抢)，但不包括最后一个人</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.amount<span class="number">-1</span>):</span><br><span class="line">            <span class="comment"># 为了保证后面每一个人至少还能领0.01元(*100=1)</span></span><br><span class="line">            <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">                <span class="comment"># 模拟 do~while 语法</span></span><br><span class="line">                self.people[i] = random.randrange(<span class="number">1</span>, self.money, <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">if</span> self.money-self.people[i] &gt;= self.amount<span class="number">-1</span>-i:</span><br><span class="line">                    self.money -= self.people[i]</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="comment"># 还原数据</span></span><br><span class="line">            self.people[i] /= <span class="number">100</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 剩余的钱都是最后一个人的</span></span><br><span class="line">        self.people[<span class="number">-1</span>] = self.money / <span class="number">100</span></span><br><span class="line">        <span class="comment"># 输出</span></span><br><span class="line">        print(self.people)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    q = Q(money=<span class="number">100.00</span>, amount=<span class="number">10</span>)</span><br><span class="line">    q.out()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们模拟20次输出（红包大小：100元，红包数量：10个），能发现，红包最后几个抢的人，是真的惨！（有兴趣的小伙伴，可以用这个代码多实现几次模拟数据，用于一些统计需求）</p>
+</li>
+</ul>
+<div align="center"><br>    <small>表格数据</small><br></div>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">6</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">8</th>
+<th style="text-align:center">9</th>
+<th style="text-align:center">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>1.</strong></td>
+<td style="text-align:center">79.93</td>
+<td style="text-align:center">9.63</td>
+<td style="text-align:center">4.65</td>
+<td style="text-align:center">2.54</td>
+<td style="text-align:center">0.47</td>
+<td style="text-align:center">0.93</td>
+<td style="text-align:center">0.64</td>
+<td style="text-align:center">0.41</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.79</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>2.</strong></td>
+<td style="text-align:center">9.45</td>
+<td style="text-align:center">89.06</td>
+<td style="text-align:center">1.13</td>
+<td style="text-align:center">0.04</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">0.04</td>
+<td style="text-align:center">0.02</td>
+<td style="text-align:center">0.04</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.01</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>3.</strong></td>
+<td style="text-align:center">23.85</td>
+<td style="text-align:center">67.55</td>
+<td style="text-align:center">2.06</td>
+<td style="text-align:center">5.61</td>
+<td style="text-align:center">0.52</td>
+<td style="text-align:center">0.34</td>
+<td style="text-align:center">0.03</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.02</td>
+<td style="text-align:center">0.01</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>4.</strong></td>
+<td style="text-align:center">80.07</td>
+<td style="text-align:center">0.57</td>
+<td style="text-align:center">16.13</td>
+<td style="text-align:center">1.72</td>
+<td style="text-align:center">1.43</td>
+<td style="text-align:center">0.02</td>
+<td style="text-align:center">0.02</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.02</td>
+<td style="text-align:center">0.01</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>5.</strong></td>
+<td style="text-align:center">39.29</td>
+<td style="text-align:center">0.18</td>
+<td style="text-align:center">13.05</td>
+<td style="text-align:center">46.24</td>
+<td style="text-align:center">0.68</td>
+<td style="text-align:center">0.18</td>
+<td style="text-align:center">0.22</td>
+<td style="text-align:center">0.03</td>
+<td style="text-align:center">0.04</td>
+<td style="text-align:center">0.09</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>6.</strong></td>
+<td style="text-align:center">71.5</td>
+<td style="text-align:center">17.01</td>
+<td style="text-align:center">8.53</td>
+<td style="text-align:center">0.75</td>
+<td style="text-align:center">1.77</td>
+<td style="text-align:center">0.36</td>
+<td style="text-align:center">0.05</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.01</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>7.</strong></td>
+<td style="text-align:center">48.0</td>
+<td style="text-align:center">1.47</td>
+<td style="text-align:center">9.7</td>
+<td style="text-align:center">1.92</td>
+<td style="text-align:center">10.15</td>
+<td style="text-align:center">27.14</td>
+<td style="text-align:center">0.49</td>
+<td style="text-align:center">0.35</td>
+<td style="text-align:center">0.74</td>
+<td style="text-align:center">0.04</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>8.</strong></td>
+<td style="text-align:center">56.67</td>
+<td style="text-align:center">0.54</td>
+<td style="text-align:center">5.08</td>
+<td style="text-align:center">24.82</td>
+<td style="text-align:center">4.3</td>
+<td style="text-align:center">6.51</td>
+<td style="text-align:center">0.83</td>
+<td style="text-align:center">1.06</td>
+<td style="text-align:center">0.05</td>
+<td style="text-align:center">0.14</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>9.</strong></td>
+<td style="text-align:center">64.13</td>
+<td style="text-align:center">2.65</td>
+<td style="text-align:center">19.91</td>
+<td style="text-align:center">9.6</td>
+<td style="text-align:center">0.41</td>
+<td style="text-align:center">1.36</td>
+<td style="text-align:center">1.82</td>
+<td style="text-align:center">0.04</td>
+<td style="text-align:center">0.03</td>
+<td style="text-align:center">0.05</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>10.</strong></td>
+<td style="text-align:center">81.75</td>
+<td style="text-align:center">6.85</td>
+<td style="text-align:center">8.45</td>
+<td style="text-align:center">0.29</td>
+<td style="text-align:center">0.46</td>
+<td style="text-align:center">1.06</td>
+<td style="text-align:center">0.99</td>
+<td style="text-align:center">0.02</td>
+<td style="text-align:center">0.12</td>
+<td style="text-align:center">0.01</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>11.</strong></td>
+<td style="text-align:center">61.24</td>
+<td style="text-align:center">12.78</td>
+<td style="text-align:center">12.44</td>
+<td style="text-align:center">8.22</td>
+<td style="text-align:center">3.6</td>
+<td style="text-align:center">0.88</td>
+<td style="text-align:center">0.04</td>
+<td style="text-align:center">0.44</td>
+<td style="text-align:center">0.11</td>
+<td style="text-align:center">0.25</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>12.</strong></td>
+<td style="text-align:center">42.43</td>
+<td style="text-align:center">5.23</td>
+<td style="text-align:center">14.21</td>
+<td style="text-align:center">26.55</td>
+<td style="text-align:center">6.64</td>
+<td style="text-align:center">3.87</td>
+<td style="text-align:center">0.93</td>
+<td style="text-align:center">0.1</td>
+<td style="text-align:center">0.02</td>
+<td style="text-align:center">0.02</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>13.</strong></td>
+<td style="text-align:center">18.14</td>
+<td style="text-align:center">49.41</td>
+<td style="text-align:center">10.03</td>
+<td style="text-align:center">13.62</td>
+<td style="text-align:center">0.62</td>
+<td style="text-align:center">4.89</td>
+<td style="text-align:center">1.67</td>
+<td style="text-align:center">0.71</td>
+<td style="text-align:center">0.35</td>
+<td style="text-align:center">0.56</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>14.</strong></td>
+<td style="text-align:center">61.72</td>
+<td style="text-align:center">0.23</td>
+<td style="text-align:center">24.47</td>
+<td style="text-align:center">4.32</td>
+<td style="text-align:center">7.97</td>
+<td style="text-align:center">0.46</td>
+<td style="text-align:center">0.32</td>
+<td style="text-align:center">0.44</td>
+<td style="text-align:center">0.04</td>
+<td style="text-align:center">0.03</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>15.</strong></td>
+<td style="text-align:center">21.97</td>
+<td style="text-align:center">8.93</td>
+<td style="text-align:center">6.02</td>
+<td style="text-align:center">23.73</td>
+<td style="text-align:center">1.77</td>
+<td style="text-align:center">4.55</td>
+<td style="text-align:center">1.08</td>
+<td style="text-align:center">1.71</td>
+<td style="text-align:center">3.65</td>
+<td style="text-align:center">26.59</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>16.</strong></td>
+<td style="text-align:center">84.32</td>
+<td style="text-align:center">5.34</td>
+<td style="text-align:center">5.62</td>
+<td style="text-align:center">0.55</td>
+<td style="text-align:center">2.2</td>
+<td style="text-align:center">0.73</td>
+<td style="text-align:center">0.34</td>
+<td style="text-align:center">0.79</td>
+<td style="text-align:center">0.05</td>
+<td style="text-align:center">0.06</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>17.</strong></td>
+<td style="text-align:center">4.93</td>
+<td style="text-align:center">35.89</td>
+<td style="text-align:center">48.15</td>
+<td style="text-align:center">5.01</td>
+<td style="text-align:center">5.41</td>
+<td style="text-align:center">0.26</td>
+<td style="text-align:center">0.24</td>
+<td style="text-align:center">0.08</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.02</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>18.</strong></td>
+<td style="text-align:center">95.78</td>
+<td style="text-align:center">1.98</td>
+<td style="text-align:center">1.89</td>
+<td style="text-align:center">0.06</td>
+<td style="text-align:center">0.12</td>
+<td style="text-align:center">0.06</td>
+<td style="text-align:center">0.06</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.03</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>19.</strong></td>
+<td style="text-align:center">0.53</td>
+<td style="text-align:center">32.19</td>
+<td style="text-align:center">31.53</td>
+<td style="text-align:center">3.17</td>
+<td style="text-align:center">7.36</td>
+<td style="text-align:center">23.21</td>
+<td style="text-align:center">1.63</td>
+<td style="text-align:center">0.31</td>
+<td style="text-align:center">0.05</td>
+<td style="text-align:center">0.02</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>20.</strong></td>
+<td style="text-align:center">54.4</td>
+<td style="text-align:center">21.27</td>
+<td style="text-align:center">17.67</td>
+<td style="text-align:center">6.58</td>
+<td style="text-align:center">0.03</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.01</td>
+<td style="text-align:center">0.01</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>平均</strong></td>
+<td style="text-align:center">50.005</td>
+<td style="text-align:center">18.438</td>
+<td style="text-align:center">13.036</td>
+<td style="text-align:center">9.267</td>
+<td style="text-align:center">2.806</td>
+<td style="text-align:center">3.843</td>
+<td style="text-align:center">0.572</td>
+<td style="text-align:center">0.329</td>
+<td style="text-align:center">0.267</td>
+<td style="text-align:center">1.438</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>&emsp;&emsp;现在我要模拟微信抢红包实现方式，即，咱不靠手速，纯靠运气，可以不。（可以是可以，不过我想插一句，如果红包个数一共就那么多个，因为你手速慢，而别人抢完了，何不多练练自己手速？）</p>
+<p><br></p>
+<h3 id="如何才能公平？"><a href="#如何才能公平？" class="headerlink" title="如何才能公平？"></a>如何才能公平？</h3><p>&emsp;&emsp;我们思考这个问题，可以把<code>100元</code>拟作成一条直线，<code>10个人</code>可以拟作成直线上不重合的<code>9个点</code>。即，我们可以在直线上随机取<code>9个</code>不重合的点，把直线随机分成<code>10段</code>，抢红包的人可以依次“获得”直线的每一段，直线的长度就是我们抢到的红包大小！</p>
+<p><img src="/intro/money/pic.png" width="1000"></p>
+<blockquote>
+<p>&emsp;&emsp;<strong>特别说明：</strong>本“抢红包算法”只是作者提出的一种可行思路，并不代表微信实际开发团队使用如此。微信开发团队使用的是什么算法我也不知道=.=</p>
+</blockquote>
+<h3 id="编程实现"><a href="#编程实现" class="headerlink" title="编程实现"></a>编程实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python 内置随机数模块</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个问题类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Q</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># 初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, money=<span class="number">100.0</span>, amount=<span class="number">10</span>)</span>:</span></span><br><span class="line">        <span class="comment"># 红包大小</span></span><br><span class="line">        self.money = money</span><br><span class="line">        <span class="comment"># 红包数量</span></span><br><span class="line">        self.amount = <span class="number">10</span></span><br><span class="line">        <span class="comment"># 结点数，等于红包数量-1</span></span><br><span class="line">        self.node = [<span class="number">0</span>] * (amount - <span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 抢红包的人，人数等于红包数量</span></span><br><span class="line">        self.people = [<span class="number">0.0</span>] * amount</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">out</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        由于微信最小金额设置是0.01元，</span></span><br><span class="line"><span class="string">        为方便计算，我们红包数据先统一乘以 100</span></span><br><span class="line"><span class="string">        目的是将可能出现的小数转换为整数。</span></span><br><span class="line"><span class="string">        最后计算完成，再在原来数据上统一除以 100</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        self.money *= <span class="number">100</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.amount<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">                <span class="comment"># 模拟 do~while 语法</span></span><br><span class="line">                n = random.randrange(<span class="number">1</span>, self.money, <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">if</span> n <span class="keyword">not</span> <span class="keyword">in</span> self.node:</span><br><span class="line">                    <span class="comment"># 新生成的随机结点不在 node 列表中则满足</span></span><br><span class="line">                    self.node[i] = n</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 对结点进行升序排序</span></span><br><span class="line">        self.node.sort()</span><br><span class="line">        <span class="comment"># 根据结点间长度生成每人红包大小</span></span><br><span class="line">        self.people[<span class="number">0</span>] = self.node[<span class="number">0</span>] / <span class="number">100</span></span><br><span class="line">        self.people[<span class="number">-1</span>] = (self.money - self.node[<span class="number">-1</span>]) / <span class="number">100</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, self.amount<span class="number">-1</span>):</span><br><span class="line">            self.people[i] = (self.node[i] - self.node[i<span class="number">-1</span>]) / <span class="number">100</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 输出</span></span><br><span class="line">        print(self.people)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    q = Q(money=<span class="number">100.00</span>, amount=<span class="number">10</span>)</span><br><span class="line">    q.out()</span><br></pre></td></tr></table></figure>
+<h3 id="模拟输出分析"><a href="#模拟输出分析" class="headerlink" title="模拟输出分析"></a>模拟输出分析</h3><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">6</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">8</th>
+<th style="text-align:center">9</th>
+<th style="text-align:center">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>1.</strong></td>
+<td style="text-align:center">4.2</td>
+<td style="text-align:center">4.3</td>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">32.06</td>
+<td style="text-align:center">6.54</td>
+<td style="text-align:center">26.6</td>
+<td style="text-align:center">8.13</td>
+<td style="text-align:center">15.15</td>
+<td style="text-align:center">2.04</td>
+<td style="text-align:center">0.78</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>2.</strong></td>
+<td style="text-align:center">20.63</td>
+<td style="text-align:center">17.94</td>
+<td style="text-align:center">2.87</td>
+<td style="text-align:center">7.44</td>
+<td style="text-align:center">3.97</td>
+<td style="text-align:center">4.04</td>
+<td style="text-align:center">2.61</td>
+<td style="text-align:center">9.4</td>
+<td style="text-align:center">5.15</td>
+<td style="text-align:center">25.95</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>3.</strong></td>
+<td style="text-align:center">20.07</td>
+<td style="text-align:center">4.17</td>
+<td style="text-align:center">21.27</td>
+<td style="text-align:center">2.75</td>
+<td style="text-align:center">7.03</td>
+<td style="text-align:center">7.43</td>
+<td style="text-align:center">19.61</td>
+<td style="text-align:center">2.82</td>
+<td style="text-align:center">11.13</td>
+<td style="text-align:center">3.72</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>4.</strong></td>
+<td style="text-align:center">8.55</td>
+<td style="text-align:center">12.49</td>
+<td style="text-align:center">11.0</td>
+<td style="text-align:center">8.9</td>
+<td style="text-align:center">20.6</td>
+<td style="text-align:center">3.65</td>
+<td style="text-align:center">0.27</td>
+<td style="text-align:center">16.04</td>
+<td style="text-align:center">9.22</td>
+<td style="text-align:center">9.28</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>5.</strong></td>
+<td style="text-align:center">10.16</td>
+<td style="text-align:center">11.84</td>
+<td style="text-align:center">5.37</td>
+<td style="text-align:center">5.38</td>
+<td style="text-align:center">3.75</td>
+<td style="text-align:center">2.45</td>
+<td style="text-align:center">19.53</td>
+<td style="text-align:center">10.6</td>
+<td style="text-align:center">20.97</td>
+<td style="text-align:center">9.95</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>6.</strong></td>
+<td style="text-align:center">25.76</td>
+<td style="text-align:center">14.73</td>
+<td style="text-align:center">4.44</td>
+<td style="text-align:center">3.78</td>
+<td style="text-align:center">4.61</td>
+<td style="text-align:center">8.38</td>
+<td style="text-align:center">0.69</td>
+<td style="text-align:center">2.71</td>
+<td style="text-align:center">21.19</td>
+<td style="text-align:center">13.71</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>7.</strong></td>
+<td style="text-align:center">1.48</td>
+<td style="text-align:center">31.14</td>
+<td style="text-align:center">2.96</td>
+<td style="text-align:center">2.01</td>
+<td style="text-align:center">13.08</td>
+<td style="text-align:center">14.28</td>
+<td style="text-align:center">5.87</td>
+<td style="text-align:center">9.94</td>
+<td style="text-align:center">13.67</td>
+<td style="text-align:center">5.57</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>8.</strong></td>
+<td style="text-align:center">7.21</td>
+<td style="text-align:center">22.63</td>
+<td style="text-align:center">0.64</td>
+<td style="text-align:center">6.81</td>
+<td style="text-align:center">20.79</td>
+<td style="text-align:center">9.2</td>
+<td style="text-align:center">6.43</td>
+<td style="text-align:center">4.44</td>
+<td style="text-align:center">17.44</td>
+<td style="text-align:center">4.41</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>9.</strong></td>
+<td style="text-align:center">9.36</td>
+<td style="text-align:center">3.17</td>
+<td style="text-align:center">35.82</td>
+<td style="text-align:center">1.17</td>
+<td style="text-align:center">12.51</td>
+<td style="text-align:center">15.12</td>
+<td style="text-align:center">8.13</td>
+<td style="text-align:center">4.46</td>
+<td style="text-align:center">2.59</td>
+<td style="text-align:center">7.67</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>10.</strong></td>
+<td style="text-align:center">5.1</td>
+<td style="text-align:center">5.28</td>
+<td style="text-align:center">1.92</td>
+<td style="text-align:center">8.2</td>
+<td style="text-align:center">8.96</td>
+<td style="text-align:center">10.21</td>
+<td style="text-align:center">32.12</td>
+<td style="text-align:center">1.58</td>
+<td style="text-align:center">26.36</td>
+<td style="text-align:center">0.27</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>11.</strong></td>
+<td style="text-align:center">3.1</td>
+<td style="text-align:center">2.72</td>
+<td style="text-align:center">1.48</td>
+<td style="text-align:center">45.51</td>
+<td style="text-align:center">1.9</td>
+<td style="text-align:center">4.2</td>
+<td style="text-align:center">19.38</td>
+<td style="text-align:center">11.33</td>
+<td style="text-align:center">8.39</td>
+<td style="text-align:center">1.99</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>12.</strong></td>
+<td style="text-align:center">4.09</td>
+<td style="text-align:center">2.22</td>
+<td style="text-align:center">9.43</td>
+<td style="text-align:center">2.11</td>
+<td style="text-align:center">31.25</td>
+<td style="text-align:center">2.06</td>
+<td style="text-align:center">6.41</td>
+<td style="text-align:center">5.79</td>
+<td style="text-align:center">32.19</td>
+<td style="text-align:center">4.45</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>13.</strong></td>
+<td style="text-align:center">14.04</td>
+<td style="text-align:center">11.56</td>
+<td style="text-align:center">2.83</td>
+<td style="text-align:center">4.45</td>
+<td style="text-align:center">6.54</td>
+<td style="text-align:center">6.5</td>
+<td style="text-align:center">5.77</td>
+<td style="text-align:center">5.85</td>
+<td style="text-align:center">21.27</td>
+<td style="text-align:center">21.19</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>14.</strong></td>
+<td style="text-align:center">2.57</td>
+<td style="text-align:center">0.61</td>
+<td style="text-align:center">32.13</td>
+<td style="text-align:center">8.6</td>
+<td style="text-align:center">12.36</td>
+<td style="text-align:center">8.33</td>
+<td style="text-align:center">7.89</td>
+<td style="text-align:center">11.98</td>
+<td style="text-align:center">10.88</td>
+<td style="text-align:center">4.65</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>15.</strong></td>
+<td style="text-align:center">12.64</td>
+<td style="text-align:center">15.44</td>
+<td style="text-align:center">1.28</td>
+<td style="text-align:center">0.15</td>
+<td style="text-align:center">3.18</td>
+<td style="text-align:center">23.68</td>
+<td style="text-align:center">17.97</td>
+<td style="text-align:center">9.65</td>
+<td style="text-align:center">3.43</td>
+<td style="text-align:center">12.58</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>16.</strong></td>
+<td style="text-align:center">5.5</td>
+<td style="text-align:center">11.73</td>
+<td style="text-align:center">16.35</td>
+<td style="text-align:center">0.47</td>
+<td style="text-align:center">10.99</td>
+<td style="text-align:center">13.77</td>
+<td style="text-align:center">6.28</td>
+<td style="text-align:center">26.55</td>
+<td style="text-align:center">4.47</td>
+<td style="text-align:center">3.89</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>17.</strong></td>
+<td style="text-align:center">9.21</td>
+<td style="text-align:center">0.87</td>
+<td style="text-align:center">0.53</td>
+<td style="text-align:center">5.93</td>
+<td style="text-align:center">12.25</td>
+<td style="text-align:center">8.33</td>
+<td style="text-align:center">12.44</td>
+<td style="text-align:center">0.83</td>
+<td style="text-align:center">44.65</td>
+<td style="text-align:center">4.96</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>18.</strong></td>
+<td style="text-align:center">5.81</td>
+<td style="text-align:center">4.78</td>
+<td style="text-align:center">19.94</td>
+<td style="text-align:center">8.17</td>
+<td style="text-align:center">2.26</td>
+<td style="text-align:center">0.64</td>
+<td style="text-align:center">15.44</td>
+<td style="text-align:center">0.36</td>
+<td style="text-align:center">7.98</td>
+<td style="text-align:center">34.62</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>19.</strong></td>
+<td style="text-align:center">8.32</td>
+<td style="text-align:center">17.92</td>
+<td style="text-align:center">4.21</td>
+<td style="text-align:center">5.09</td>
+<td style="text-align:center">0.99</td>
+<td style="text-align:center">3.18</td>
+<td style="text-align:center">12.76</td>
+<td style="text-align:center">17.56</td>
+<td style="text-align:center">27.33</td>
+<td style="text-align:center">2.64</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>20.</strong></td>
+<td style="text-align:center">28.29</td>
+<td style="text-align:center">2.91</td>
+<td style="text-align:center">2.25</td>
+<td style="text-align:center">23.93</td>
+<td style="text-align:center">10.0</td>
+<td style="text-align:center">22.27</td>
+<td style="text-align:center">0.16</td>
+<td style="text-align:center">3.63</td>
+<td style="text-align:center">0.36</td>
+<td style="text-align:center">6.2</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>平均</strong></td>
+<td style="text-align:center">10.304</td>
+<td style="text-align:center">9.923</td>
+<td style="text-align:center">8.846</td>
+<td style="text-align:center">9.146</td>
+<td style="text-align:center">9.678</td>
+<td style="text-align:center">9.716</td>
+<td style="text-align:center">10.394</td>
+<td style="text-align:center">8.534</td>
+<td style="text-align:center">14.535</td>
+<td style="text-align:center">8.924</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>可以看到，只要样本数量足够大，每个人平均都能获得10元钱。即不分先后，抢到红包的人运气都“一样”</p>
+</blockquote>
+<p><br></p>
+<h2 id="💸-程序优化"><a href="#💸-程序优化" class="headerlink" title="💸 程序优化"></a>💸 程序优化</h2><p>&emsp;&emsp;通过上述算法，我们的确实现了 <strong>对于每个抢到红包的人，不分先后的获得了一个随机红包大小</strong>。但是，我们还没有实现红包数额的 <strong>“吉利化”</strong>。</p>
+<p>&emsp;&emsp;（其实通过样本数据我们能看到，每一次红包分配出的金额里，都会有几个相对吉利的数字。吉不吉利主要也是看人们的心态，虽然我并不知道微信抢红包算法是如何实现，但是我觉得此算法已经可以使用）</p>
+<p>&emsp;&emsp;——“所以你就不想实现红包数额的‘吉利化’了吗？你就想偷懒了吗？”</p>
+<p>&emsp;&emsp;——“不不不，纵使我觉得上述算法已经可以，但是大过年的，我还是希望每个抢到红包的人都能获得一个相对吉利的红包数额！”</p>
+<p><img src="/intro/money/kua.jpg" width="250"></p>
+<h3 id="如何取得更多的吉利数字？"><a href="#如何取得更多的吉利数字？" class="headerlink" title="如何取得更多的吉利数字？"></a>如何取得更多的吉利数字？</h3><p>&emsp;&emsp;像，<code>6</code>、<code>8</code>、<code>9</code>，包括<code>1</code>（幺，等同于“要”）这样的数字，是大家普遍比较喜爱的。我们要让这些数字尽可能多的出现在我们抢到的红包数额中。</p>
+<p>&emsp;&emsp;但是发的红包数额如果相对较大，别人抢到大红包的概率也越大。我们这里先做一个 <strong>“约定”：抢到10元以上红包的人，就不考虑将其数字吉利化了，因为抢到10元红包以上的人，我相信不会特别在乎是不是10.66元或者18.88元，从金额上说，他们大概率也都满足了，所以我们只对那些只抢到10元以下红包的人做数字吉利化。</strong>（这也是为了方便行事，说白也算是一种偷懒=。=）</p>
+<p>&emsp;&emsp;所以，这个问题就被我们 <ruby>简<rp>(</rp><rt>tou</rt><rp>)</rp></ruby> <ruby>化<rp>(</rp><rt>lan</rt><rp>)</rp></ruby> 成：对抢到的10元以下红包，多加入<code>1</code>、<code>6</code>、<code>8</code>、<code>9</code>这样的数字（如 0.66、0.68、0.88、1.68、1.99……）</p>
+<p><img src="/intro/money/think.jpg" width="250"></p>
+<p>&emsp;&emsp;这里有两种考虑模式：<strong>1.“被动”选择</strong>、<strong>2.“主动”选择</strong>（其中 “被动”选择 不考虑上述 约定，其 约定 主要用于 “主动”选择）</p>
+<h4 id="1-“被动”选择"><a href="#1-“被动”选择" class="headerlink" title="1. “被动”选择"></a>1. “被动”选择</h4><p>&emsp;&emsp;何为“被动”选择？即我们按照上述第二种算法，照常算出一组结果（用列表或数组存储）。再对每个人抢到的红包数额做分析，如果出现 吉利数 的频次符合我们的预期，则保留我们这组结果，否则，重新获取一组新的结果。循环直到满足退出。</p>
+<blockquote>
+<p>&emsp;&emsp;<strong>注意：</strong> 这样的编程逻辑虽然很简单，但是要使用到我们的 do~while 直到型循环，而 Python 中并不提供这样的原生语法，所以我们只能通过语法逻辑，自己构建。</p>
+</blockquote>
+<p>&emsp;&emsp;这样的算法模式，优点是，不需要我们去做大量的前期数据处理工作，用大量的随机结果去满足我们需要的条件。很明显，对比于后面我们要讲的“主动”选择，会提高大量的时间复杂度！</p>
+<p>&emsp;&emsp;下面就结合上述第二例代码来实现一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python 内置随机数模块</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个幸运数类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Lucky</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># 初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, lucky_numbers=[])</span>:</span></span><br><span class="line">        <span class="comment"># 默认 1,6,8,9 是幸运数</span></span><br><span class="line">        self.lucky_numbers = [<span class="number">1</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line">        <span class="comment"># 用户可以提供其他幸运数</span></span><br><span class="line">        self.lucky_numbers += lucky_numbers</span><br><span class="line">        <span class="comment"># 消去重复元素，先取其集合，再取其列表</span></span><br><span class="line">        self.lucky_numbers = list(set(self.lucky_numbers))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 是否是幸运数</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">is_lucky</span><span class="params">(self, number)</span>:</span></span><br><span class="line">        <span class="comment"># 使用仿三元表达式 ?:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">True</span> <span class="keyword">if</span> number <span class="keyword">in</span> self.lucky_numbers <span class="keyword">else</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个问题类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Q</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># 初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, money=<span class="number">100.0</span>, amount=<span class="number">10</span>)</span>:</span></span><br><span class="line">        <span class="comment"># 红包大小</span></span><br><span class="line">        self.money = money</span><br><span class="line">        <span class="comment"># 红包数量</span></span><br><span class="line">        self.amount = <span class="number">10</span></span><br><span class="line">        <span class="comment"># 结点数，等于红包数量-1</span></span><br><span class="line">        self.node = [<span class="number">0</span>] * (amount - <span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 抢红包的人，人数等于红包数量</span></span><br><span class="line">        self.people = [<span class="number">0.0</span>] * amount</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">out</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        由于微信最小金额设置是0.01元，</span></span><br><span class="line"><span class="string">        为方便计算，我们红包数据先统一乘以 100</span></span><br><span class="line"><span class="string">        目的是将可能出现的小数转换为整数。</span></span><br><span class="line"><span class="string">        最后计算完成，再在原来数据上统一除以 100</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        self.money *= <span class="number">100</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.amount<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">                <span class="comment"># 模拟 do~while 语法</span></span><br><span class="line">                n = random.randrange(<span class="number">1</span>, self.money, <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">if</span> n <span class="keyword">not</span> <span class="keyword">in</span> self.node:</span><br><span class="line">                    <span class="comment"># 新生成的随机结点不在 node 列表中则满足</span></span><br><span class="line">                    self.node[i] = n</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 对结点进行升序排序</span></span><br><span class="line">        self.node.sort()</span><br><span class="line">        <span class="comment"># 根据结点间长度生成每人红包大小</span></span><br><span class="line">        self.people[<span class="number">0</span>] = self.node[<span class="number">0</span>] / <span class="number">100</span></span><br><span class="line">        self.people[<span class="number">-1</span>] = (self.money - self.node[<span class="number">-1</span>]) / <span class="number">100</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, self.amount<span class="number">-1</span>):</span><br><span class="line">            self.people[i] = (self.node[i] - self.node[i<span class="number">-1</span>]) / <span class="number">100</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 输出</span></span><br><span class="line">        <span class="keyword">return</span> self.people</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment"># 实例化 Lucky 类</span></span><br><span class="line">    l = Lucky()</span><br><span class="line">    <span class="comment"># 预期达到频次</span></span><br><span class="line">    freq = <span class="number">0.5</span></span><br><span class="line">    <span class="comment"># 红包结果</span></span><br><span class="line">    results = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 模拟 do~while 语法</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        <span class="comment"># 满足幸运数个数</span></span><br><span class="line">        count = <span class="number">0</span></span><br><span class="line">        <span class="comment"># 数字总数</span></span><br><span class="line">        total = <span class="number">0</span></span><br><span class="line">        <span class="comment"># 实例化 Q 类</span></span><br><span class="line">        q = Q(money=<span class="number">100.00</span>, amount=<span class="number">10</span>)</span><br><span class="line">        results = q.out()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 取得每个人红包数额</span></span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> results:</span><br><span class="line">            <span class="comment"># 对红包数额字符串化(乘以100消去小数点)</span></span><br><span class="line">            string = str(int(r*<span class="number">100</span>))</span><br><span class="line">            <span class="comment"># 取得字符串中每个字符</span></span><br><span class="line">            <span class="keyword">for</span> char <span class="keyword">in</span> string:</span><br><span class="line">                <span class="comment"># 字符转数字</span></span><br><span class="line">                num = int(char)</span><br><span class="line">                <span class="keyword">if</span> l.is_lucky(num):</span><br><span class="line">                    count += <span class="number">1</span></span><br><span class="line">                total += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 满足频次则退出</span></span><br><span class="line">        <span class="keyword">if</span> count / total &gt; freq:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输出</span></span><br><span class="line">    print(results)</span><br></pre></td></tr></table></figure>
+<h4 id="2-“主动”选择"><a href="#2-“主动”选择" class="headerlink" title="2. “主动”选择"></a>2. “主动”选择</h4><p>&emsp;&emsp;何为“主动”选择？相比于“被动”选择，我们只做完备的前期数据处理，一次结果输出，即满足我们的结果。而不需要“被动”选择中用 直到型循环 去试结果。</p>
+<p>&emsp;&emsp;可是，前期数据处理？这就难办了…</p>
+<p><img src="/intro/money/bqb.jpg" width="200"></p>
+<p><br><br><br></p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://fmw666.github.io">范茂伟</a>
+            <p>原文链接：<a href="http://fmw666.github.io/2020-01-25/微信抢红包算法实现/">http://fmw666.github.io/2020-01-25/微信抢红包算法实现/</a>
+            <p>发表日期：<a href="http://fmw666.github.io/2020-01-25/微信抢红包算法实现/">January 25th 2020, 12:00:00 am</a>
+            <p>更新日期：<a href="http://fmw666.github.io/2020-01-25/微信抢红包算法实现/">January 25th 2020, 4:54:00 pm</a>
+            <p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2018-11-28/C语言游戏开发基础/" title= "《C语言》游戏开发基础">
+                    <div class="prevTitle">《C语言》游戏开发基础</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:fmw19990718@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/fmw666" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                  
+                  <img class="profile-qr" src="/assets/example_qq.jpg" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#💬-写在最前"><span class="toc-number">1.</span> <span class="toc-text">💬 写在最前</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#❔-问题提出"><span class="toc-number">2.</span> <span class="toc-text">❔ 问题提出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#🔍-开始思考"><span class="toc-number">3.</span> <span class="toc-text">🔍 开始思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#💡-编程解决"><span class="toc-number">4.</span> <span class="toc-text">💡 编程解决</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何才能公平？"><span class="toc-number">4.1.</span> <span class="toc-text">如何才能公平？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编程实现"><span class="toc-number">4.2.</span> <span class="toc-text">编程实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模拟输出分析"><span class="toc-number">4.3.</span> <span class="toc-text">模拟输出分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#💸-程序优化"><span class="toc-number">5.</span> <span class="toc-text">💸 程序优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何取得更多的吉利数字？"><span class="toc-number">5.1.</span> <span class="toc-text">如何取得更多的吉利数字？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-“被动”选择"><span class="toc-number">5.1.1.</span> <span class="toc-text">1. “被动”选择</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-“主动”选择"><span class="toc-number">5.1.2.</span> <span class="toc-text">2. “主动”选择</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 4
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/25</span><a class="archive-post-title" href= "/2020-01-25/微信抢红包算法实现/" >微信抢红包算法实现（Python）</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/28</span><a class="archive-post-title" href= "/2018-11-28/C语言游戏开发基础/" >《C语言》游戏开发基础</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/02</span><a class="archive-post-title" href= "/2018-11-02/git教程/" >git教程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2018-11-01/hello-world/" >Hello World</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="C语言"><span class="iconfont-archer">&#xe606;</span>C语言</span>
+    
+        <span class="sidebar-tag-name" data-tags="游戏"><span class="iconfont-archer">&#xe606;</span>游戏</span>
+    
+        <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
+    
+        <span class="sidebar-tag-name" data-tags="后台"><span class="iconfont-archer">&#xe606;</span>后台</span>
+    
+        <span class="sidebar-tag-name" data-tags="算法"><span class="iconfont-archer">&#xe606;</span>算法</span>
+    
+        <span class="sidebar-tag-name" data-tags="抢红包"><span class="iconfont-archer">&#xe606;</span>抢红包</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="IT"><span class="iconfont-archer">&#xe60a;</span>IT</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "范茂伟"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
