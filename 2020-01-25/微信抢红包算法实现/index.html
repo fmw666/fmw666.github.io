@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">4.1k</span>阅读时长: <span class="post-count reading-time">17 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">4.1k</span>阅读时长: <span class="post-count reading-time">18 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -1053,10 +1053,7 @@ height:50vh;
 <p>&emsp;&emsp;——“不不不，纵使我觉得上述算法已经可以，但是大过年的，我还是希望每个抢到红包的人都能获得一个相对吉利的红包数额！”</p>
 <p><img src="/intro/money/kua.jpg" width="250"></p>
 <h3 id="如何取得更多的吉利数字？"><a href="#如何取得更多的吉利数字？" class="headerlink" title="如何取得更多的吉利数字？"></a>如何取得更多的吉利数字？</h3><p>&emsp;&emsp;像，<code>6</code>、<code>8</code>、<code>9</code>，包括<code>1</code>（幺，等同于“要”）这样的数字，是大家普遍比较喜爱的。我们要让这些数字尽可能多的出现在我们抢到的红包数额中。</p>
-<p>&emsp;&emsp;但是发的红包数额如果相对较大，别人抢到大红包的概率也越大。我们这里先做一个 <strong>“约定”：抢到10元以上红包的人，就不考虑将其数字吉利化了，因为抢到10元红包以上的人，我相信不会特别在乎是不是10.66元或者18.88元，从金额上说，他们大概率也都满足了，所以我们只对那些只抢到10元以下红包的人做数字吉利化。</strong>（这也是为了方便行事，说白也算是一种偷懒=。=）</p>
-<p>&emsp;&emsp;所以，这个问题就被我们 <ruby>简<rp>(</rp><rt>tou</rt><rp>)</rp></ruby> <ruby>化<rp>(</rp><rt>lan</rt><rp>)</rp></ruby> 成：对抢到的10元以下红包，多加入<code>1</code>、<code>6</code>、<code>8</code>、<code>9</code>这样的数字（如 0.66、0.68、0.88、1.68、1.99……）</p>
-<p><img src="/intro/money/think.jpg" width="250"></p>
-<p>&emsp;&emsp;这里有两种考虑模式：<strong>1.“被动”选择</strong>、<strong>2.“主动”选择</strong>（其中 “被动”选择 不考虑上述 约定，其 约定 主要用于 “主动”选择）</p>
+<p>&emsp;&emsp;这里有两种考虑模式：<strong>1.“被动”选择</strong>、<strong>2.“主动”选择</strong></p>
 <h4 id="1-“被动”选择"><a href="#1-“被动”选择" class="headerlink" title="1. “被动”选择"></a>1. “被动”选择</h4><p>&emsp;&emsp;何为“被动”选择？即我们按照上述第二种算法，照常算出一组结果（用列表或数组存储）。再对每个人抢到的红包数额做分析，如果出现 吉利数 的频次符合我们的预期，则保留我们这组结果，否则，重新获取一组新的结果。循环直到满足退出。</p>
 <blockquote>
 <p>&emsp;&emsp;<strong>注意：</strong> 这样的编程逻辑虽然很简单，但是要使用到我们的 do~while 直到型循环，而 Python 中并不提供这样的原生语法，所以我们只能通过语法逻辑，自己构建。</p>
@@ -1067,6 +1064,12 @@ height:50vh;
 <h4 id="2-“主动”选择"><a href="#2-“主动”选择" class="headerlink" title="2. “主动”选择"></a>2. “主动”选择</h4><p>&emsp;&emsp;何为“主动”选择？相比于“被动”选择，我们只做完备的前期数据处理，一次结果输出，即满足我们的结果。而不需要“被动”选择中用 直到型循环 去试结果。</p>
 <p>&emsp;&emsp;可是，前期数据处理？这就难办了…</p>
 <p><img src="/intro/money/bqb.jpg" width="200"></p>
+<p>&emsp;&emsp;首先，如果发的红包数额相对较大，别人抢到大红包（大于10元）的概率也就越大。我们这里先做一个 <strong>“约定”：抢到10元以上红包的人，就不考虑将其数字吉利化了，因为抢到10元红包以上的人，我相信不会特别在乎是不是10.66元或者18.88元，从金额上说，他们大概率也都满足了，所以我们只对那些只抢到10元以下红包的人做数字吉利化。</strong>（这也是为了方便行事，说白也算是一种偷懒=。=）</p>
+<p>&emsp;&emsp;所以，这个问题就被我们 <ruby>简<rp>(</rp><rt>tou</rt><rp>)</rp></ruby> <ruby>化<rp>(</rp><rt>lan</rt><rp>)</rp></ruby> 成：对抢到的10元以下红包，多加入<code>1</code>、<code>6</code>、<code>8</code>、<code>9</code>这样的数字（如 0.66、0.68、0.88、1.68、1.99……）</p>
+<p><img src="/intro/money/think.jpg" width="250"></p>
+<p>&emsp;&emsp;现在，我就先把这个思路留在这儿，供读者们自己去解决了！</p>
+<p><br></p>
+<p>&emsp;&emsp;感谢阅读！</p>
 <p><br><br><br></p>
 
     </article>
@@ -1076,13 +1079,18 @@ height:50vh;
             <p>原文作者：<a href="http://fmw666.github.io">范茂伟</a>
             <p>原文链接：<a href="http://fmw666.github.io/2020-01-25/微信抢红包算法实现/">http://fmw666.github.io/2020-01-25/微信抢红包算法实现/</a>
             <p>发表日期：<a href="http://fmw666.github.io/2020-01-25/微信抢红包算法实现/">January 25th 2020, 12:00:00 am</a>
-            <p>更新日期：<a href="http://fmw666.github.io/2020-01-25/微信抢红包算法实现/">January 25th 2020, 4:54:00 pm</a>
+            <p>更新日期：<a href="http://fmw666.github.io/2020-01-25/微信抢红包算法实现/">February 16th 2020, 7:22:09 pm</a>
             <p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020-02-16/计算机中有趣的递归缩写命名/" title= "计算机中有趣的递归缩写命名">
+                    <div class="nextTitle">计算机中有趣的递归缩写命名</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -1266,9 +1274,18 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 4
+        Total : 5
         </div>
         <!-- search  -->
         
@@ -1281,6 +1298,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/16</span><a class="archive-post-title" href= "/2020-02-16/计算机中有趣的递归缩写命名/" >计算机中有趣的递归缩写命名</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1316,10 +1338,6 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="C语言"><span class="iconfont-archer">&#xe606;</span>C语言</span>
-    
-        <span class="sidebar-tag-name" data-tags="游戏"><span class="iconfont-archer">&#xe606;</span>游戏</span>
-    
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
     
         <span class="sidebar-tag-name" data-tags="后台"><span class="iconfont-archer">&#xe606;</span>后台</span>
@@ -1327,6 +1345,14 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="算法"><span class="iconfont-archer">&#xe606;</span>算法</span>
     
         <span class="sidebar-tag-name" data-tags="抢红包"><span class="iconfont-archer">&#xe606;</span>抢红包</span>
+    
+        <span class="sidebar-tag-name" data-tags="C语言"><span class="iconfont-archer">&#xe606;</span>C语言</span>
+    
+        <span class="sidebar-tag-name" data-tags="游戏"><span class="iconfont-archer">&#xe606;</span>游戏</span>
+    
+        <span class="sidebar-tag-name" data-tags="命名"><span class="iconfont-archer">&#xe606;</span>命名</span>
+    
+        <span class="sidebar-tag-name" data-tags="递归"><span class="iconfont-archer">&#xe606;</span>递归</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
