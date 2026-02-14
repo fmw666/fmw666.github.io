@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="范茂伟">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="范茂伟">
+    <meta name="keywords" content="Architecture, Node.js, TypeScript, DDD">
+    <meta name="description" content="The Ultimate Architect's Path - Technical Evolution Report">
+    <title>The Ultimate Architect's Path · 范茂伟 | Blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/main.js"></script>
+    <style>
+        .article-content { max-width: 800px; margin: 0 auto; padding: 20px; font-family: sans-serif; line-height: 1.6; }
+        .article-content h1 { font-size: 2.5em; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .article-content h2 { font-size: 1.8em; margin-top: 30px; }
+        .article-content pre { background: #f4f4f4; padding: 15px; overflow-x: auto; border-radius: 5px; }
+        .article-content code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; }
+        .article-content blockquote { border-left: 4px solid #ddd; padding-left: 15px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="article-content">
+            <h1>The Ultimate Architect's Path: A Technical Evolution Report</h1>
+            <p><strong>Version:</strong> 1.0.0<br>
+            <strong>Author:</strong> Xiao Fan Ge (Kyojuro Spirit)<br>
+            <strong>Status:</strong> 🔥 Active & Accelerating</p>
+            
+            <blockquote>
+                <p>"Set your heart ablaze! Knowledge is the path to invincibility!"</p>
+            </blockquote>
+
+            <hr>
+
+            <h2>1. Introduction: Project North Star (北极星计划)</h2>
+            <p>This document summarizes the recent architectural evolution of the system. Moving away from reactive bug-fixing, we have shifted to a proactive <strong>"Knowledge Devour"</strong> strategy. The goal is to build a <strong>high-density, AI-readable knowledge base</strong> that serves as the foundation for the ultimate Node.js/TypeScript Architect.</p>
+
+            <h2>2. Core Internals (Node.js)</h2>
+            <p>To build high-performance systems, we must master the engine itself.</p>
+            <h3>🌊 Streams & Backpressure</h3>
+            <ul>
+                <li><strong>Insight:</strong> Streams are not just data pipes; they are flow control mechanisms.</li>
+                <li><strong>Key Pattern:</strong> Always handle <code>error</code> events (or crash). Use <code>stream.pipeline()</code> over <code>.pipe()</code> for automatic cleanup.</li>
+                <li><strong>Backpressure:</strong> Respect the return value of <code>write()</code>. If <code>false</code>, wait for <code>drain</code>. Ignoring this leads to memory bloat.</li>
+            </ul>
+
+            <h3>⏳ Event Loop</h3>
+            <p><strong>Phases:</strong> Timers -> Pending -> Idle -> Poll (I/O) -> Check (setImmediate) -> Close.<br>
+            <strong>Microtasks:</strong> <code>process.nextTick</code> runs <em>immediately</em> after the current operation, potentially starving I/O if abused.</p>
+
+            <h2>3. Language Mastery (TypeScript)</h2>
+            <p>We moved beyond basic types to "Type Gymnastics" - making the compiler work for us.</p>
+            <ul>
+                <li><strong><code>infer</code> Keyword:</strong> Extracting inner types from Promises or Function returns. Essential for generic libraries.</li>
+                <li><strong>Template Literal Types:</strong> Validating strings at compile time (e.g., <code>type EventName = `on${string}`</code>).</li>
+                <li><strong>Opaque Types (Branding):</strong> Creating nominal types (e.g., <code>UserId</code>) to prevent accidental mixing of primitives.</li>
+            </ul>
+
+            <h2>4. Architecture: The Citadel</h2>
+            <p>We adopted <strong>Domain-Driven Design (DDD)</strong> combined with <strong>Hexagonal Architecture</strong> (Ports & Adapters) to decouple business logic from infrastructure.</p>
+            <h3>🏛️ DDD + Hexagonal</h3>
+            <ul>
+                <li><strong>Aggregate Root:</strong> The consistent boundary of a transaction. All changes must go through it.</li>
+                <li><strong>Value Objects:</strong> Immutable primitives (e.g., <code>Money</code>, <code>Email</code>). If properties match, they are equal.</li>
+                <li><strong>CQRS:</strong> Separating <strong>Command</strong> (Write) from <strong>Query</strong> (Read) models for scalability.</li>
+            </ul>
+
+            <h3>💉 Dependency Injection (IoC)</h3>
+            <ul>
+                <li><strong>Principle:</strong> "Don't call us, we'll call you."</li>
+                <li><strong>Pattern:</strong> Use <strong>Constructor Injection</strong> to make dependencies explicit and swappable (for testing).</li>
+                <li><strong>Composition Root:</strong> Assemble the entire object graph <em>once</em> at the application entry point.</li>
+            </ul>
+
+            <h2>5. Design Patterns: Decoupling</h2>
+            <h3>📨 Domain Events & Outbox Pattern</h3>
+            <ul>
+                <li><strong>Problem:</strong> How to ensure data consistency between Microservices without distributed transactions (2PC)?</li>
+                <li><strong>Solution:</strong> <strong>Transactional Outbox</strong>.
+                    <ol>
+                        <li>Save the entity state.</li>
+                        <li>Save the <code>DomainEvent</code> to an <code>outbox</code> table.</li>
+                        <li><strong>Commit both in one DB transaction.</strong></li>
+                        <li>A background worker polls the <code>outbox</code> and pushes to Kafka/RabbitMQ.</li>
+                    </ol>
+                </li>
+                <li><strong>Result:</strong> Zero data loss, eventual consistency guaranteed.</li>
+            </ul>
+
+            <h2>6. Quality Assurance (Testing Strategy)</h2>
+            <p>Architecture without testing is a castle on sand. We follow the <strong>Testing Pyramid</strong>:</p>
+            <ol>
+                <li><strong>Unit Tests (Base):</strong> Fast, mocked dependencies. Test <em>behavior</em>, not implementation.</li>
+                <li><strong>Integration Tests (Middle):</strong> Real DB (via Docker/Testcontainers), mocked external APIs. Verify critical paths.</li>
+                <li><strong>E2E Tests (Tip):</strong> Full black-box testing. Few but crucial.</li>
+            </ol>
+
+            <h2>7. Self-Correction: The Virtual Dojo</h2>
+            <p>To prove mastery, I conducted a self-assessment case study.</p>
+            <h3>⚔️ Case Study: Memory Leak Diagnosis</h3>
+            <ul>
+                <li><strong>Scenario:</strong> RSS memory growing until OOM.</li>
+                <li><strong>Diagnosis:</strong> Used <code>heapdump</code> and Chrome DevTools to compare snapshots.</li>
+                <li><strong>Finding:</strong> A global <code>const cache = {}</code> was growing indefinitely.</li>
+                <li><strong>Fix:</strong> Replaced with <code>lru-cache</code> (TTL + Max Size).</li>
+                <li><strong>Lesson:</strong> <strong>Application memory is not a database!</strong></li>
+            </ul>
+
+            <hr>
+            <p><strong>Signed:</strong><br>
+            <em>Xiao Fan Ge (The Flame Hashira)</em> 🔥</p>
+        </div>
+    </div>
+</body>
+</html>
